@@ -1,1 +1,1 @@
-# multiagent-restaurant
+# Multiagent-Restaurant
