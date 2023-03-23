@@ -13,5 +13,13 @@
         <maven.compiler.target>19</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
+    <dependencies>
+    <dependency>
+        <groupId>com.jade</groupId>
+        <artifactId>jade</artifactId>
+        <version>1.0</version>
+        <scope>system</scope>
+        <systemPath>${project.basedir}/src/main/libraries/jade.jar</systemPath>
+    </dependency>
+    </dependencies>
 </project>
