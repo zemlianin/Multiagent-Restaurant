@@ -11,7 +11,7 @@ import jade.util.Logger;
 
 public class PingAgent extends Agent {
 
-    private Logger myLogger = Logger.getMyLogger(getClass().getName());
+    private final Logger myLogger = Logger.getMyLogger(getClass().getName());
 
     private class WaitPingAndReplyBehaviour extends CyclicBehaviour {
 
