@@ -9,7 +9,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import org.example.JadeAgent;
 import org.example.behaviour.SendMessageBehaviour;
-import org.example.simple_models.Person;
+import org.example.models.Person;
 
 @JadeAgent("HelloAgent")
 public class HelloWorldAgent extends Agent {

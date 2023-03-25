@@ -1,4 +1,4 @@
-package org.example.simple_models;
+package org.example.models;
 
 public class Person {
 

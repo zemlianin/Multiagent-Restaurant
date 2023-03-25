@@ -3,7 +3,7 @@ package org.example.behaviour;
 import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
-import org.example.simple_models.Person;
+import org.example.models.Person;
 import org.example.util.JsonMessage;
 
 public class SendMessageBehaviour extends Behaviour {
