@@ -1,13 +1,16 @@
 package org.example.models;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Person {
 
     private String name;
 
     private String lastname;
-
-    public Person(String name, String family) {
-        this.name = name;
-        this.lastname = family;
-    }
 }
+
