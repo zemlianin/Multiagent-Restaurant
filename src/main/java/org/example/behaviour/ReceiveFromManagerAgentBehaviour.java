@@ -10,6 +10,7 @@ import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.example.agents.ManagerAgent;
+import org.example.agents.OrderAgent;
 import org.example.util.ACLMessageUtil;
 import org.example.util.JsonMessage;
 
@@ -54,7 +55,7 @@ public class ReceiveFromManagerAgentBehaviour<T> extends CyclicBehaviour {
         ServiceDescription serviceDescription = new ServiceDescription();
 
 
-        serviceDescription.setType("OrderAgent");
+        serviceDescription.setType(OrderAgent.AGENT_TYPE);
         template.addServices(serviceDescription);
         try {
             DFAgentDescription[] result = DFService.search(myAgent, template);

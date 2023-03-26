@@ -15,12 +15,10 @@ import org.example.models.Dish;
 
 import java.util.List;
 
-// @JadeAgent
+@JadeAgent("CookAgent")
 public class CookAgent extends Agent {
-    // The Dish that Cook can cook
-    //private List<Dish> targetDishes;
     private Dish targetDish;
-    // The list of known orders agents
+    public static final String AGENT_TYPE = "CookAgent";
     private List<AID> OrderAgents;
 
     @Override
@@ -29,6 +27,22 @@ public class CookAgent extends Agent {
         // System.out.println("Hello! Cook-agent " + getAID().getName() + " is ready.");
         System.out.println("- Птичка, Птичка, я Повар " + getAID().getName() + ", как слышно ? Приём");
         // Get the dishes that this cook can make
+        DFAgentDescription agentDescription = new DFAgentDescription();
+        agentDescription.setName(getAID());
+
+        ServiceDescription serviceDescription = new ServiceDescription();
+        serviceDescription.setType(AGENT_TYPE);
+        serviceDescription.setName("OrderAgent");
+
+        agentDescription.addServices(serviceDescription);
+
+        try {
+            DFService.register(this, agentDescription);
+        } catch (FIPAException ex) {
+            ex.printStackTrace();
+        }
+/*
+
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
             targetDish = (Dish) args[0];
@@ -40,7 +54,7 @@ public class CookAgent extends Agent {
                     DFAgentDescription template = new DFAgentDescription();
                     ServiceDescription serviceDescription = new ServiceDescription();
 
-                    serviceDescription.setType(BookSellerAgent.AGENT_TYPE);
+                    serviceDescription.setType("CookAgent");
                     template.addServices(serviceDescription);
                     try {
                         DFAgentDescription[] result = DFService.search(myAgent, template);
@@ -59,7 +73,7 @@ public class CookAgent extends Agent {
             // Make the agent terminate immediately
             System.out.println("No order specified");
             doDelete();
-        }
+        }*/
     }
 
     @Override

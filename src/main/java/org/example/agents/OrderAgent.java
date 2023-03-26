@@ -1,5 +1,6 @@
 package org.example.agents;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
 import jade.domain.DFService;
@@ -8,31 +9,34 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import org.example.JadeAgent;
+import org.example.models.Order;
+import org.example.util.ACLMessageUtil;
+import org.example.util.JsonMessage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-// @JadeAgent
+@JadeAgent("OrderAgent")
 public class OrderAgent extends Agent {
 
-    private Map<String, Integer> order = new HashMap<>();
+    private ArrayList<Order> orders = new ArrayList<>();
 
-    public static final String AGENT_TYPE = "order-cooking";
+    public static final String AGENT_TYPE = "OrderAgent";
 
     public OrderAgent() {
-        order.put("Борщ", 5);
     }
 
     @Override
     protected void setup() {
-        order = new HashMap<>();
 
         DFAgentDescription agentDescription = new DFAgentDescription();
         agentDescription.setName(getAID());
 
         ServiceDescription serviceDescription = new ServiceDescription();
         serviceDescription.setType(AGENT_TYPE);
-        serviceDescription.setName("JADE-order-making");
+        serviceDescription.setName("OrderAgent");
 
         agentDescription.addServices(serviceDescription);
 
@@ -43,15 +47,14 @@ public class OrderAgent extends Agent {
         }
 
         addBehaviour(new OrderRequestsServer());
-        addBehaviour(new PurchaseOrdersServer());
+        //  addBehaviour(new PurchaseOrdersServer());
     }
 
     @Override
     protected void takeDown() {
         try {
             DFService.deregister(this);
-        }
-        catch (FIPAException fe) {
+        } catch (FIPAException fe) {
             fe.printStackTrace();
         }
 
@@ -63,23 +66,45 @@ public class OrderAgent extends Agent {
 
         @Override
         public void action() {
-            MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACLMessage.CFP);
-            ACLMessage msg = myAgent.receive(messageTemplate);
-
+            ACLMessage msg = myAgent.receive();
             if (msg != null) {
-                String dish = msg.getContent();
-                ACLMessage reply = msg.createReply();
 
-                Integer timeToCook = order.get(dish);
-                if (timeToCook != null) {
-                    reply.setPerformative(ACLMessage.PROPOSE);
-                    reply.setContent("not-available");
+                var order = ACLMessageUtil.getContent(msg, Order.class);
+                JsonMessage cfp = new JsonMessage(ACLMessage.CFP);
+                orders.add(order);
+                System.out.println("Новый список текущих заказов:" + orders);
+
+                AID[] recipients = getCookAgent();
+                for (AID recipient : recipients) {
+                    cfp.addReceiver(recipient);
                 }
-
-                myAgent.send(reply);
+                cfp.setContent(order);
+                myAgent.send(cfp);
+                System.out.println("Заказ отправлен");
             } else {
                 block();
             }
+        }
+
+        private AID[] getCookAgent() {
+
+            ArrayList<AID> orderAgens = new ArrayList<>();
+            DFAgentDescription template = new DFAgentDescription();
+            ServiceDescription serviceDescription = new ServiceDescription();
+
+
+            serviceDescription.setType(CookAgent.AGENT_TYPE);
+            template.addServices(serviceDescription);
+            try {
+                DFAgentDescription[] result = DFService.search(myAgent, template);
+                for (DFAgentDescription agentDescription : result) {
+                    orderAgens.add(agentDescription.getName());
+                }
+            } catch (FIPAException ex) {
+                ex.printStackTrace();
+            }
+            return orderAgens.toArray(new AID[0]);
+
         }
     }
 
@@ -89,20 +114,7 @@ public class OrderAgent extends Agent {
             MessageTemplate messageTemplate = MessageTemplate.MatchPerformative(ACLMessage.ACCEPT_PROPOSAL);
             ACLMessage msg = myAgent.receive(messageTemplate);
             if (msg != null) {
-                // ACCEPT_PROPOSAL Message received. Process it
-                String dish = msg.getContent();
-                ACLMessage reply = msg.createReply();
 
-                Integer price = order.remove(dish);
-                if (price != null) {
-                    reply.setPerformative(ACLMessage.INFORM);
-                    System.out.println(dish + " cooked by cook " + msg.getSender().getName());
-                } else {
-                    // The requested book has been sold to another buyer in the meanwhile .
-                    reply.setPerformative(ACLMessage.FAILURE);
-                    reply.setContent("not-available");
-                }
-                myAgent.send(reply);
             } else {
                 block();
             }

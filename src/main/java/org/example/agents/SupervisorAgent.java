@@ -8,7 +8,7 @@ import jade.lang.acl.MessageTemplate;
 import jade.wrapper.AgentController;
 import jade.wrapper.StaleProxyException;
 
-public class SupervisorAgent extends Agent {
+/*public class SupervisorAgent extends Agent {
 
     private AID storageAgent; // Агент склада
     private int orderNumber = 1; // Номер заказа
@@ -29,8 +29,8 @@ public class SupervisorAgent extends Agent {
                 // Создание нового агента заказа
                 String orderName = "order" + orderNumber++;
                 try {
-                    AgentController orderAgent = getContainerController().createNewAgent(orderName, OrderAgentBroke.class.getName(), null);
-                    orderAgent.start();
+                   // AgentController orderAgent = getContainerController().createNewAgent(orderName, OrderAgentBroke.class.getName(), null);
+                  //  orderAgent.start();
                     // Отправка сообщения агенту склада с запросом на резервирование продуктов
                     ACLMessage request = new ACLMessage(ACLMessage.REQUEST);
                     request.addReceiver(storageAgent);
@@ -49,13 +49,14 @@ public class SupervisorAgent extends Agent {
                         send(inform);
                     } else {
                         System.out.println("Reservation failed for " + orderName);
-                    }
-                } catch (StaleProxyException e) {
-                    e.printStackTrace();
-                }
-            } else {
+                    }*/
+            //    } catch (StaleProxyException e) {
+              //      e.printStackTrace();
+                //}
+        /*    } else {
                 block();
-            }
+            }*/
+/*
         }
     }
 
@@ -63,4 +64,5 @@ public class SupervisorAgent extends Agent {
         System.out.println("Supervisor agent " + getAID().getName() + " is terminating.");
     }
 }
+*/
 

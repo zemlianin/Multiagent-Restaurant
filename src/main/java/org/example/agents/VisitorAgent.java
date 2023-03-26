@@ -19,6 +19,7 @@ import org.example.models.Visitor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @JadeAgent(number = 4)
@@ -29,6 +30,11 @@ public class VisitorAgent extends Agent {
 
     @Override
     protected void setup() {
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         Object[] args = getArguments();
         if (args != null && args.length > 0) {
             Visitor visitor = (Visitor) args[0];
