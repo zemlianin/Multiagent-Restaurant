@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@JadeAgent(number = 2)
+@JadeAgent(number = 4)
 public class VisitorAgent extends Agent {
 
     private List<String> wishes = new ArrayList<>();
@@ -60,8 +60,7 @@ public class VisitorAgent extends Agent {
         addBehaviour(new OneShotBehaviour() {
             @Override
             public void action() {
-                System.out.println(getAID().getName() + " Сделал заказ");
-
+                System.out.println(getAID().getName() + " Сделал заказ" + wishes);
                 DFAgentDescription template = new DFAgentDescription();
                 ServiceDescription serviceDescription = new ServiceDescription();
 

@@ -1,11 +1,13 @@
 package org.example.agents;
 
+import jade.core.AID;
 import jade.core.Agent;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import org.example.JadeAgent;
+import org.example.behaviour.ReceiveFromManagerAgentBehaviour;
 import org.example.behaviour.ReceiveMessageBehaviour;
 import org.example.models.Dish;
 import org.example.models.Menu;
@@ -37,7 +39,7 @@ public class ManagerAgent extends Agent {
                 fe.printStackTrace();
             }
 
-            addBehaviour(new ReceiveMessageBehaviour(Order.class));
+            addBehaviour(new ReceiveFromManagerAgentBehaviour<>(Order.class));
         } else {
             System.out.println("No wishes title specified");
             doDelete();

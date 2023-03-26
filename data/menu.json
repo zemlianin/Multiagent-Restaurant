@@ -1,1 +1,34 @@
-{"dishes":[{"name":"chicken","price":100,"makingTime":200},{"name":"potato","price":100,"makingTime":200},{"name":"tomato","price":10,"makingTime":100},{"name":"meet","price":400,"makingTime":500},{"name":"water","price":10,"makingTime":10},{"name":"coffee","price":200,"makingTime":200}]}
+{
+  "dishes": [
+    {
+      "name": "chicken",
+      "price": 100,
+      "makingTime": 200
+    },
+    {
+      "name": "potato",
+      "price": 100,
+      "makingTime": 200
+    },
+    {
+      "name": "tomato",
+      "price": 10,
+      "makingTime": 100
+    },
+    {
+      "name": "meet",
+      "price": 400,
+      "makingTime": 500
+    },
+    {
+      "name": "water",
+      "price": 10,
+      "makingTime": 10
+    },
+    {
+      "name": "coffee",
+      "price": 200,
+      "makingTime": 200
+    }
+  ]
+}

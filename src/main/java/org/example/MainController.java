@@ -80,6 +80,7 @@ class MainController {
                 arg.add(visitors[0]);
             }
             createAgent(clazz, agentName, arg.toArray()).start();
+            arg.clear();
         } else {
             for (int i = 0; i < jadeAgent.number(); ++i) {
                 if (clazz == VisitorAgent.class) {
@@ -92,6 +93,7 @@ class MainController {
                                 agentName,
                                 i
                         ), arg.toArray()).start();
+                arg.clear();
 
             }
         }
