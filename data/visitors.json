@@ -1,1 +1,30 @@
-[{"name":"Ivan","wishes":["potato","chicken"]},{"name":"Anton","wishes":["potato","chicken"]}]
+[
+  {
+    "name": "Ivan",
+    "wishes": [
+      "potato",
+      "chicken"
+    ]
+  },
+  {
+    "name": "Anton",
+    "wishes": [
+      "potato",
+      "chicken"
+    ]
+  },
+  {
+    "name": "John",
+    "wishes": [
+      "potato",
+      "tomato"
+    ]
+  },
+  {
+    "name": "Max",
+    "wishes": [
+      "meet",
+      "water"
+    ]
+  }
+]
