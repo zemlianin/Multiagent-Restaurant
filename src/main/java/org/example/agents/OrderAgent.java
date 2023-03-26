@@ -8,11 +8,12 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import org.example.JadeAgent;
 
 import java.util.HashMap;
 import java.util.Map;
 
-// @JadeAgent
+@JadeAgent
 public class OrderAgent extends Agent {
 
     private Map<String, Integer> order = new HashMap<>();
