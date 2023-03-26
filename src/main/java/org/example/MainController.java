@@ -9,6 +9,7 @@ import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
 import org.example.agents.ManagerAgent;
 import org.example.agents.VisitorAgent;
+import org.example.models.Cook;
 import org.example.models.Menu;
 import org.example.models.Visitor;
 import org.reflections.Reflections;
@@ -23,6 +24,8 @@ class MainController {
     private final ContainerController containerController;
     private final Visitor[] visitors;
     private final Menu menu;
+
+    // private final Cook[] cooks;
 
     public MainController(Visitor[] visitors, Menu menu) {
         this.visitors = visitors;

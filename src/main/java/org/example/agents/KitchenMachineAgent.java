@@ -15,7 +15,7 @@ import org.example.models.Dish;
 
 import java.util.List;
 
-// @JadeAgent
+@JadeAgent
 public class KitchenMachineAgent extends Agent {
     // The Dish that machine can cook
     //private List<Dish> targetDishes;

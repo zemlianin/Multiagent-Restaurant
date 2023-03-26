@@ -2,6 +2,7 @@ package org.example;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.models.Cook;
 import org.example.models.Dish;
 import org.example.models.Menu;
 import org.example.models.Visitor;
@@ -33,6 +34,23 @@ public class Main {
         Menu menu = getMenu();
         MainController mainController = new MainController(visitors, menu);
         mainController.initAgents("org.example.agents");
+    }
+
+    public static Cook[] getCooks() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        String content = "";
+        Cook[] cooks = new Cook[0];
+        try (FileReader reader = new FileReader("data/cooks.json")) {
+            // читаем посимвольно
+            int c;
+            while ((c = reader.read()) != -1) {
+                content += (char) c;
+            }
+            cooks = objectMapper.readValue(content, Cook[].class);
+        } catch (IOException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return cooks;
     }
 
     public static Menu getMenu() {
