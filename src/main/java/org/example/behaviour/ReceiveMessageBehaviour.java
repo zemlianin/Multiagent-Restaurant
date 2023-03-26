@@ -2,15 +2,20 @@ package org.example.behaviour;
 
 import jade.core.behaviours.Behaviour;
 import jade.lang.acl.ACLMessage;
-import org.example.models.Person;
 import org.example.util.ACLMessageUtil;
 
-public class ReceiveMessageBehaviour extends Behaviour {
+public class ReceiveMessageBehaviour<T> extends Behaviour {
+    final Class<T> typeParameterClass;
+
+    public ReceiveMessageBehaviour(Class<T> typeParameterClass) {
+        this.typeParameterClass = typeParameterClass;
+    }
+
     @Override
     public void action() {
         ACLMessage msg = myAgent.receive();
         if (msg != null) {
-            System.out.println("Received: " + ACLMessageUtil.getContent(msg, Person.class));
+            System.out.println("Received: " + ACLMessageUtil.getContent(msg, typeParameterClass));
         }
         else {
             block();

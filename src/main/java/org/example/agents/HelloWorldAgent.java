@@ -11,7 +11,7 @@ import org.example.JadeAgent;
 import org.example.behaviour.SendMessageBehaviour;
 import org.example.models.Person;
 
-@JadeAgent("HelloAgent")
+// @JadeAgent("HelloAgent")
 public class HelloWorldAgent extends Agent {
 
     private AID[] testAgents;

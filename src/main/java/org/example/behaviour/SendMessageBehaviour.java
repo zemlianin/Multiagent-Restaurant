@@ -6,12 +6,15 @@ import jade.lang.acl.ACLMessage;
 import org.example.models.Person;
 import org.example.util.JsonMessage;
 
-public class SendMessageBehaviour extends Behaviour {
+import java.util.ArrayList;
+import java.util.List;
 
-    private final Person message;
+public class SendMessageBehaviour<T> extends Behaviour {
+
+    private final T message;
     private final AID[] recipients;
 
-    public SendMessageBehaviour(AID[] recipients, Person message) {
+    public SendMessageBehaviour(AID[] recipients, T message) {
         this.recipients = recipients;
         this.message = message;
     }
