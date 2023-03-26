@@ -7,7 +7,9 @@ import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
+import org.example.agents.ManagerAgent;
 import org.example.agents.VisitorAgent;
+import org.example.models.Menu;
 import org.example.models.Visitor;
 import org.reflections.Reflections;
 
@@ -20,9 +22,11 @@ class MainController {
 
     private final ContainerController containerController;
     private final Visitor[] visitors;
+    private final Menu menu;
 
-    public MainController(Visitor[] visitors) {
+    public MainController(Visitor[] visitors, Menu menu) {
         this.visitors = visitors;
+        this.menu = menu;
         final Runtime rt = Runtime.instance();
         final Profile p = new ProfileImpl();
 
@@ -68,6 +72,9 @@ class MainController {
                         ? jadeAgent.value()
                         : clazz.getSimpleName();
         ArrayList<Object> arg = new ArrayList<>();
+        if (clazz == ManagerAgent.class) {
+            arg.add(menu);
+        }
         if (jadeAgent.number() == 1) {
             if (clazz == VisitorAgent.class) {
                 arg.add(visitors[0]);

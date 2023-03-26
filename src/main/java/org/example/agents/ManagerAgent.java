@@ -7,30 +7,41 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import org.example.JadeAgent;
 import org.example.behaviour.ReceiveMessageBehaviour;
+import org.example.models.Dish;
+import org.example.models.Menu;
 import org.example.models.Order;
+import org.example.models.Visitor;
+
+import java.util.ArrayList;
 
 @JadeAgent("Manager")
 public class ManagerAgent extends Agent {
     public static final String AGENT_TYPE = "Manager";
+    public static Menu menu;
 
     @Override
     protected void setup() {
-        System.out.println("Hello from " + getAID().getName());
+        Object[] args = getArguments();
+        if (args != null && args.length > 0) {
+            menu = (Menu) args[0];
 
-        // Register the book-selling service in the yellow pages
-        DFAgentDescription dfd = new DFAgentDescription();
-        dfd.setName(getAID());
-        ServiceDescription sd = new ServiceDescription();
-        sd.setType("Manager");
-        sd.setName("Manager");
-        dfd.addServices(sd);
-        try {
-            DFService.register(this, dfd);
-        } catch (FIPAException fe) {
-            fe.printStackTrace();
+            DFAgentDescription dfd = new DFAgentDescription();
+            dfd.setName(getAID());
+            ServiceDescription sd = new ServiceDescription();
+            sd.setType("Manager");
+            sd.setName("Manager");
+            dfd.addServices(sd);
+            try {
+                DFService.register(this, dfd);
+            } catch (FIPAException fe) {
+                fe.printStackTrace();
+            }
+
+            addBehaviour(new ReceiveMessageBehaviour(Order.class));
+        } else {
+            System.out.println("No wishes title specified");
+            doDelete();
         }
-
-        addBehaviour(new ReceiveMessageBehaviour(Order.class));
     }
 
     @Override
