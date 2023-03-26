@@ -7,7 +7,7 @@ import jade.lang.acl.ACLMessage;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DishAgent extends Agent {
+public class DishAgentBroke extends Agent {
 
     private List<String> processAgents; // список агентов процесса
     private List<String> operationAgents; // список агентов операций

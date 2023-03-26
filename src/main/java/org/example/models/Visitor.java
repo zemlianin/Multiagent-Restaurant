@@ -1,15 +1,15 @@
 package org.example.models;
 
+import java.util.ArrayList;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Menu {
-    ArrayList<Dish> dishes;
+public class Visitor {
+    public String name;
+    public ArrayList<String> wishes;
 }

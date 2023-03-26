@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OrderAgent extends Agent {
+public class OrderAgentBroke extends Agent {
     private Map<String, Integer> orderList;
     private int estimatedWaitTime;
 

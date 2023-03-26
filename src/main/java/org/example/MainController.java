@@ -7,17 +7,22 @@ import jade.core.Runtime;
 import jade.wrapper.AgentController;
 import jade.wrapper.ContainerController;
 import jade.wrapper.StaleProxyException;
+import org.example.agents.VisitorAgent;
+import org.example.models.Visitor;
 import org.reflections.Reflections;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Set;
 
 class MainController {
 
     private final ContainerController containerController;
+    private final Visitor[] visitors;
 
-    public MainController() {
+    public MainController(Visitor[] visitors) {
+        this.visitors = visitors;
         final Runtime rt = Runtime.instance();
         final Profile p = new ProfileImpl();
 
@@ -62,26 +67,33 @@ class MainController {
                 !Objects.equals(jadeAgent.value(), "")
                         ? jadeAgent.value()
                         : clazz.getSimpleName();
-
+        ArrayList<Object> arg = new ArrayList<>();
         if (jadeAgent.number() == 1) {
-            createAgent(clazz, agentName).start();
+            if (clazz == VisitorAgent.class) {
+                arg.add(visitors[0]);
+            }
+            createAgent(clazz, agentName, arg.toArray()).start();
         } else {
             for (int i = 0; i < jadeAgent.number(); ++i) {
+                if (clazz == VisitorAgent.class) {
+                    arg.add(visitors[i]);
+                }
                 createAgent(
                         clazz,
                         MessageFormat.format(
                                 "{0}{1}",
                                 agentName,
                                 i
-                        )).start();
+                        ), arg.toArray()).start();
+
             }
         }
     }
 
-    private AgentController createAgent(Class<?> clazz, String agentName) throws StaleProxyException {
+    private AgentController createAgent(Class<?> clazz, String agentName, Object[] arg) throws StaleProxyException {
         return containerController.createNewAgent(
                 agentName,
                 clazz.getName(),
-                null);
+                arg);
     }
 }

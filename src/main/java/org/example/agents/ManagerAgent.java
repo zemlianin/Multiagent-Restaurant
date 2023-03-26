@@ -10,7 +10,7 @@ import org.example.behaviour.ReceiveMessageBehaviour;
 import org.example.models.Order;
 
 @JadeAgent("Manager")
-public class Manager extends Agent {
+public class ManagerAgent extends Agent {
     public static final String AGENT_TYPE = "Manager";
 
     @Override

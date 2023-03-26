@@ -1,96 +1,86 @@
 package org.example.agents;
 
+import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.*;
-import jade.lang.acl.ACLMessage;
-import jade.lang.acl.MessageTemplate;
+import jade.core.behaviours.TickerBehaviour;
+import jade.domain.DFService;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
+import org.example.JadeAgent;
+import org.example.behaviour.SendMessageBehaviour;
+import org.example.models.Dish;
+import org.example.models.Menu;
+import org.example.models.Order;
+import org.example.models.Visitor;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
+
+@JadeAgent(number = 1)
 public class VisitorAgent extends Agent {
 
-    private String menu;
-    private String[] availableItems;
+    private List<String> wishes = new ArrayList<>();
+    private List<AID> managerAgents = new ArrayList<>();
 
+    @Override
     protected void setup() {
+        Object[] args = getArguments();
+        if (args != null && args.length > 0) {
+            Visitor visitor = (Visitor) args[0];
+            wishes = visitor.wishes;
+            System.out.println("Я посетитель и я зашел");
+            makeOrder();
+        } else {
+            System.out.println("No wishes title specified");
+            doDelete();
+        }
+    }
 
-        // Register the agent with the DF
-        // ...
+    protected Dish[] selectDishes() {
+        var menu = new Menu();
+        var t = new ArrayList<Dish>();
+        t.add(new Dish("chicken", 200, 100));
+        t.add(new Dish("potato", 200, 100));
+        menu.setDishes(t);
 
-        // Request the current menu from the manager agent
-        addBehaviour(new OneShotBehaviour() {
-            public void action() {
-                ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-                msg.addReceiver(managerAgent);
-                msg.setContent("get-menu");
-                send(msg);
+        ArrayList<Dish> dishes = new ArrayList<>();
+        for (var wish : wishes) {
+            var wantDish = menu.getDishes().stream().filter(p -> p.getName().equals(wish)).findAny();
+            if (wantDish.isPresent()) {
+                dishes.add(wantDish.get());
+            } else {
+                System.out.print("Блюда с названием " + wish + " нет в меню \n");
             }
-        });
+        }
+        return dishes.toArray(new Dish[0]);
+    }
 
-        // Receive the menu from the manager agent
-        addBehaviour(new CyclicBehaviour() {
-            public void action() {
-                MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-                ACLMessage msg = receive(mt);
-                if (msg != null) {
-                    menu = msg.getContent();
-                    availableItems = getMenuItems(menu);
-                } else {
-                    block();
-                }
-            }
-        });
+    protected void makeOrder() {
+        addBehaviour(new TickerBehaviour(this, 2000) {
+            protected void onTick() {
+                System.out.println(getAID().getName() + " Сделал заказ");
 
-        // Request an order from the order agent
-        addBehaviour(new OneShotBehaviour() {
-            public void action() {
-                ACLMessage msg = new ACLMessage(ACLMessage.REQUEST);
-                msg.addReceiver(orderAgent);
-                msg.setContent("place-order");
-                msg.setConversationId("restaurant-order");
-                msg.setReplyWith("order" + System.currentTimeMillis());
-                send(msg);
-            }
-        });
+                DFAgentDescription template = new DFAgentDescription();
+                ServiceDescription serviceDescription = new ServiceDescription();
 
-        // Receive the estimated wait time from the order agent
-        addBehaviour(new CyclicBehaviour() {
-            public void action() {
-                MessageTemplate mt = MessageTemplate.and(
-                        MessageTemplate.MatchPerformative(ACLMessage.INFORM),
-                        MessageTemplate.MatchConversationId("restaurant-order"),
-                        MessageTemplate.MatchInReplyTo(msg.getReplyWith()));
-                ACLMessage msg = receive(mt);
-                if (msg != null) {
-                    String waitTime = msg.getContent();
-                    // Display the estimated wait time to the user
-                } else {
-                    block();
-                }
-            }
-        });
 
-        // Wait for notifications from other agents about unavailable menu items
-        addBehaviour(new CyclicBehaviour() {
-            public void action() {
-                MessageTemplate mt = MessageTemplate.MatchPerformative(ACLMessage.INFORM);
-                ACLMessage msg = receive(mt);
-                if (msg != null) {
-                    String item = msg.getContent();
-                    if (!isAvailable(item)) {
-                        // Disable the item in the menu
+                serviceDescription.setType(ManagerAgent.AGENT_TYPE);
+                template.addServices(serviceDescription);
+                try {
+                    DFAgentDescription[] result = DFService.search(myAgent, template);
+                    for (DFAgentDescription agentDescription : result) {
+                        managerAgents.add(agentDescription.getName());
                     }
-                } else {
-                    block();
+                } catch (FIPAException ex) {
+                    ex.printStackTrace();
                 }
+                myAgent.addBehaviour(new SendMessageBehaviour(managerAgents.toArray(new AID[0]),
+                        new Order(selectDishes()
+                        )));
             }
         });
     }
-
-    private String[] getMenuItems(String menu) {
-        // Parse the menu string and extract the available items
-    }
-
-    private boolean isAvailable(String item) {
-        // Check if the item is currently available in the menu
-    }
-
 }

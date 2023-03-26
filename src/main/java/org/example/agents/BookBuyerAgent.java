@@ -42,7 +42,7 @@ public class BookBuyerAgent extends Agent {
                     try {
                         DFAgentDescription[] result = DFService.search(myAgent, template);
 
-                        for (DFAgentDescription agentDescription: result) {
+                        for (DFAgentDescription agentDescription : result) {
                             sellerAgents.add(agentDescription.getName());
                         }
                     } catch (FIPAException ex) {

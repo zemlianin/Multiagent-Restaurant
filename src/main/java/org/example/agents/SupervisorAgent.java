@@ -29,7 +29,7 @@ public class SupervisorAgent extends Agent {
                 // Создание нового агента заказа
                 String orderName = "order" + orderNumber++;
                 try {
-                    AgentController orderAgent = getContainerController().createNewAgent(orderName, OrderAgent.class.getName(), null);
+                    AgentController orderAgent = getContainerController().createNewAgent(orderName, OrderAgentBroke.class.getName(), null);
                     orderAgent.start();
                     // Отправка сообщения агенту склада с запросом на резервирование продуктов
                     ACLMessage request = new ACLMessage(ACLMessage.REQUEST);

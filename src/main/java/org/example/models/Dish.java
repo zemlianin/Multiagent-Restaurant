@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Dish {
-    String dish_name;
+    String name;
     int MakingTime;
+    int price;
 }
