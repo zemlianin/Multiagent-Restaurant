@@ -2,6 +2,7 @@ package org.example.agents;
 
 import jade.core.AID;
 import jade.core.Agent;
+import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
@@ -9,6 +10,7 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import org.example.JadeAgent;
 import org.example.behaviour.SendMessageBehaviour;
+import org.example.behaviour.SendOrderToManagerBehaviour;
 import org.example.models.Dish;
 import org.example.models.Menu;
 import org.example.models.Order;
@@ -19,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@JadeAgent(number = 1)
+@JadeAgent(number = 2)
 public class VisitorAgent extends Agent {
 
     private List<String> wishes = new ArrayList<>();
@@ -55,8 +57,9 @@ public class VisitorAgent extends Agent {
     }
 
     protected void makeOrder() {
-        addBehaviour(new TickerBehaviour(this, 2000) {
-            protected void onTick() {
+        addBehaviour(new OneShotBehaviour() {
+            @Override
+            public void action() {
                 System.out.println(getAID().getName() + " Сделал заказ");
 
                 DFAgentDescription template = new DFAgentDescription();
@@ -73,7 +76,7 @@ public class VisitorAgent extends Agent {
                 } catch (FIPAException ex) {
                     ex.printStackTrace();
                 }
-                myAgent.addBehaviour(new SendMessageBehaviour(managerAgents.toArray(new AID[0]),
+                myAgent.addBehaviour(new SendOrderToManagerBehaviour<Order>(managerAgents.toArray(new AID[0]),
                         new Order(selectDishes()
                         )));
             }
