@@ -40,11 +40,7 @@ public class VisitorAgent extends Agent {
     }
 
     protected Dish[] selectDishes() {
-        var menu = new Menu();
-        var t = new ArrayList<Dish>();
-        t.add(new Dish("chicken", 200, 100));
-        t.add(new Dish("potato", 200, 100));
-        menu.setDishes(t);
+        var menu = ManagerAgent.menu;
 
         ArrayList<Dish> dishes = new ArrayList<>();
         for (var wish : wishes) {
